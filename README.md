@@ -18,5 +18,5 @@
 ## 3. Add new features.
 
 1. I added an open file feature by adding an "Open File" menu item to the menu, and a doOpen() function attached to an ActionListener on that item by a makeOpen() function called in makeMenuItems().
-2. I added a recent files feature by adding
+2. I added a recent files feature by adding a HashMapList of Files and their names with a max length of 5, a "Recent" submenu that was populated by an updateRecent function with attached ActionListeners that call doOpenRecent(File).
 3. I added a replace feature by adding a "Replace" menu item to the menu, and a doReplace() function attached to an ActionListener on that item by a makeReplace function called in makeMenuItems().
