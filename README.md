@@ -16,6 +16,7 @@
 4. I removed SimpleNotePad's ActionListener implementation, and the associated actionPerformed() function. I then attached actionListeners to each MenuItem with their own function that I extracted in log entry 2, in effect **replacing parameters with explicit methods**
 5. My previous refactor made makeMenuItems() a **long method**, so I performed **method extractions** for each MenuItem, moving their respective actionListener setup into makeNew(), makeSave(), makePrint(), makeCopy(), and makePaste().
 6. I removed the console out on line 114.
+7. Creation of the "Replace" submenu and functionality led to **code duplication**, so i performed **method extraction** on doOpen(), folding the actual opening functionality into doOpenFile(File).
 
 ## 3. Add new features.
 
