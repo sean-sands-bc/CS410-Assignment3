@@ -32,7 +32,7 @@ import javax.swing.JTextPane;
 import javax.swing.text.Position;
 import javax.swing.text.StyledDocument;
 public class SimpleNotePad extends JFrame{
-	//	list/hashmap or recent files, ordered from least recently opened to most recently
+	//	list/hashmap or recent files, size and laod factor chosen to minimize collision chance, ordered from least recently opened to most recently
 	LinkedHashMap<File,String> recentFiles = new LinkedHashMap<File,String>(16,.75f,true)
 	{
 		//	Limit hashmap size to 5 newest entries (most recently inserted/searched)
@@ -213,8 +213,7 @@ public class SimpleNotePad extends JFrame{
 			}
     		
     	});
-    	//rm.add(rf);
-    	rm.insert(rf, 0);	//	add JMenuItem to top of recent submenu
+    	rm.insert(rf, 0);	//	add JMenuItem to top of recent submenu, last added, most recent, goes on top
     	
     };
     
