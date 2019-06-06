@@ -6,6 +6,7 @@
 2. SimpleNotePad's actionPerformed(ActionEvent e), lines 69-119, is a **long method**
 3. The unimplemented "undo" functionality, lines 31, 41, 56, and 116-118, are **speculative generality**
 4. SimpleNotePad's actionPerformed(ActionEvent e), lines 69-119, is a **switch statement**
+5. The System.out.println on line 114 looks to be an artifact of testing.
 
 ## 2. Refactor the code. Provide a log of updates.
 
@@ -14,6 +15,7 @@
 3. I removed anything related to "undo", lines 31, 41, 56, and 116-118. I kept the TODO comment.
 4. I removed SimpleNotePad's ActionListener implementation, and the associated actionPerformed() function. I then attached actionListeners to each MenuItem with their own function that I extracted in log entry 2, in effect **replacing parameters with explicit methods**
 5. My previous refactor made makeMenuItems() a **long method**, so I performed **method extractions** for each MenuItem, moving their respective actionListener setup into makeNew(), makeSave(), makePrint(), makeCopy(), and makePaste().
+6. I removed the console out on line 114.
 
 ## 3. Add new features.
 
