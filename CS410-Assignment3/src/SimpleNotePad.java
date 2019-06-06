@@ -10,12 +10,10 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -34,10 +32,10 @@ import javax.swing.JTextPane;
 import javax.swing.text.Position;
 import javax.swing.text.StyledDocument;
 public class SimpleNotePad extends JFrame{
-	File f;
-	
+	//	list/hashmap or recent files, ordered from least recently opened to most recently
 	LinkedHashMap<File,String> recentFiles = new LinkedHashMap<File,String>(16,.75f,true)
 	{
+		//	Limit hashmap size to 5 newest entries (most recently inserted/searched)
 		protected boolean removeEldestEntry(Map.Entry<File,String> eldest) {
 	        return size() > 5;
 	     }
@@ -55,6 +53,7 @@ public class SimpleNotePad extends JFrame{
     JMenuItem c = new JMenuItem("Copy");
     JMenuItem p = new JMenuItem("Paste");
     JMenuItem r = new JMenuItem("Replace");
+    
     public SimpleNotePad() {
         setTitle("A Simple Notepad Tool");
         
@@ -88,17 +87,19 @@ public class SimpleNotePad extends JFrame{
         em.add(p);
         em.add(r);
     }
+    //	calls functions that set up JMenuItems
     private void makeMenuItems()
     {
     	makeOpen();
     	makeNew();
     	makeSave();
     	makePrint();
-    	//makeRecent();
+    	//updateRecent();	//	uncomment if recent files gains persistence
         makeCopy();
         makePaste();
         makeReplace();
     }
+    //
     private void makeMenuBar()
     {
     	mb.add(fm);
@@ -106,6 +107,7 @@ public class SimpleNotePad extends JFrame{
         setJMenuBar(mb);
     }
 
+    //	functions that set up JMenuItems
     private void makeNew()
     {
     	nf.addActionListener(new ActionListener()
@@ -178,29 +180,6 @@ public class SimpleNotePad extends JFrame{
     		
     	});
     }
-    private void updateRecent()
-    {
-    	rm.removeAll();
-    	recentFiles.forEach(addRecentItem);
-    }
-    
-    BiConsumer<File, String> addRecentItem = (f, fn) ->
-    {
-    	JMenuItem rf = new JMenuItem(fn);
-    	rf.addActionListener(new ActionListener()
-    	{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				doOpenRecent(f);
-			}
-    		
-    	});
-    	//rm.add(rf);
-    	rm.insert(rf, 0);
-    	
-    };
-    
     private void makeReplace()
     {
     	r.addActionListener(new ActionListener()
@@ -214,6 +193,32 @@ public class SimpleNotePad extends JFrame{
     	});
     }
     
+    //	updates recent submenu
+    private void updateRecent()
+    {
+    	rm.removeAll();	//	clear recent submenu
+    	recentFiles.forEach(addRecentItem);	//	create and add menu items to recent submenu
+    }
+    
+    //	add JMenuItem to recent submenu
+    BiConsumer<File, String> addRecentItem = (f, fn) ->
+    {
+    	JMenuItem rf = new JMenuItem(fn);
+    	rf.addActionListener(new ActionListener()
+    	{
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				doOpenRecent(f);
+			}
+    		
+    	});
+    	//rm.add(rf);
+    	rm.insert(rf, 0);	//	add JMenuItem to top of recent submenu
+    	
+    };
+    
+    //	functions that perform menu tasks
     private void doNew()
     {
     	d.setText("");
@@ -266,7 +271,7 @@ public class SimpleNotePad extends JFrame{
     {
     	StyledDocument doc = d.getStyledDocument();
         Position position = doc.getEndPosition();
-        System.out.println("offset"+position.getOffset());
+        //System.out.println("offset"+position.getOffset());
         d.paste();
     }
     private void doOpen()
@@ -278,6 +283,8 @@ public class SimpleNotePad extends JFrame{
     	{
     		fileToOpen = fc.getSelectedFile();
     	}
+    	doOpenRecent(fileToOpen);
+    	/*
     	try {
 			FileReader fr = new FileReader(fileToOpen);
 			BufferedReader br = new BufferedReader(fr);
@@ -287,6 +294,7 @@ public class SimpleNotePad extends JFrame{
 		}
     	recentFiles.put(fileToOpen, fileToOpen.getName());
     	updateRecent();
+    	*/
     }
     private void doOpenRecent(File f)
     {
@@ -302,6 +310,7 @@ public class SimpleNotePad extends JFrame{
     }
     private void doReplace()
     {
+    	//	spawn input window for replace
     	makeReplaceFrame();
     	
     }
@@ -313,8 +322,6 @@ public class SimpleNotePad extends JFrame{
     	JTextField inputReplaceField = new JTextField();
     	JButton inputReplaceCancel = new JButton("Cancel");
     	JButton inputReplaceOK = new JButton("OK");
-    	
-    	
     	
     	inputReplaceCancel.addActionListener(new ActionListener()
     	{
@@ -351,6 +358,7 @@ public class SimpleNotePad extends JFrame{
     	c.gridwidth=2;
     	c.gridheight=1;
     	inputReplaceFrame.add(inputReplaceLabel, c);
+    	
     	c.gridx=0;
     	c.gridy=1;
     	c.gridwidth=2;
@@ -370,12 +378,10 @@ public class SimpleNotePad extends JFrame{
     	c.gridheight=1;
     	inputReplaceFrame.add(inputReplaceOK, c);
     	
-    	
     	inputReplaceFrame.setPreferredSize(new Dimension(300,200));
     	inputReplaceFrame.pack();
     	inputReplaceFrame.setVisible(true);
-    	
-    	
+    		
     }
     
 }
