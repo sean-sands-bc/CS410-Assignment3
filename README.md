@@ -6,7 +6,7 @@
 2. SimpleNotePad's actionPerformed(ActionEvent e), lines 69-119, is a **long method**
 3. The unimplemented "undo" functionality, lines 31, 41, 56, and 116-118, are **speculative generality**
 4. SimpleNotePad's actionPerformed(ActionEvent e), lines 69-119, is a **switch statement**
-5. The System.out.println on line 114 looks to be an artifact of testing.
+5. The System.out.println on line 114 looks to be an artifact of testing, it is a **dispensable**.
 
 ## 2. Refactor the code. Provide a log of updates.
 
