@@ -209,7 +209,7 @@ public class SimpleNotePad extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				doOpenRecent(f);
+				doOpenFile(f);
 			}
     		
     	});
@@ -271,7 +271,6 @@ public class SimpleNotePad extends JFrame{
     {
     	StyledDocument doc = d.getStyledDocument();
         Position position = doc.getEndPosition();
-        //System.out.println("offset"+position.getOffset());
         d.paste();
     }
     private void doOpen()
@@ -283,20 +282,10 @@ public class SimpleNotePad extends JFrame{
     	{
     		fileToOpen = fc.getSelectedFile();
     	}
-    	doOpenRecent(fileToOpen);
-    	/*
-    	try {
-			FileReader fr = new FileReader(fileToOpen);
-			BufferedReader br = new BufferedReader(fr);
-			d.read(br, null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    	recentFiles.put(fileToOpen, fileToOpen.getName());
-    	updateRecent();
-    	*/
+    	doOpenFile(fileToOpen);
+    	
     }
-    private void doOpenRecent(File f)
+    private void doOpenFile(File f)
     {
     	try {
 			FileReader fr = new FileReader(f);
@@ -322,7 +311,7 @@ public class SimpleNotePad extends JFrame{
     	JTextField inputReplaceField = new JTextField();
     	JButton inputReplaceCancel = new JButton("Cancel");
     	JButton inputReplaceOK = new JButton("OK");
-    	
+    	//	add ActionListeners to buttons
     	inputReplaceCancel.addActionListener(new ActionListener()
     	{
 
@@ -352,7 +341,7 @@ public class SimpleNotePad extends JFrame{
     	GridBagConstraints c = new GridBagConstraints();
     	c.weightx = 1;
     	c.weighty = 1;
-    	
+    	//	add elements to frame
     	c.gridx=0;
     	c.gridy=0;
     	c.gridwidth=2;
