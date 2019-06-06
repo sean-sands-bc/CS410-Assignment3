@@ -15,6 +15,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -30,6 +34,15 @@ import javax.swing.JTextPane;
 import javax.swing.text.Position;
 import javax.swing.text.StyledDocument;
 public class SimpleNotePad extends JFrame{
+	File f;
+	
+	LinkedHashMap<File,String> recentFiles = new LinkedHashMap<File,String>(16,.75f,true)
+	{
+		protected boolean removeEldestEntry(Map.Entry<File,String> eldest) {
+	        return size() > 5;
+	     }
+	};
+	
     JMenuBar mb = new JMenuBar();
     JMenu fm = new JMenu("File");
     JMenu em = new JMenu("Edit");
@@ -81,7 +94,7 @@ public class SimpleNotePad extends JFrame{
     	makeNew();
     	makeSave();
     	makePrint();
-    	makeRecent();
+    	//makeRecent();
         makeCopy();
         makePaste();
         makeReplace();
@@ -165,10 +178,29 @@ public class SimpleNotePad extends JFrame{
     		
     	});
     }
-    private void makeRecent()
+    private void updateRecent()
     {
-    	
+    	rm.removeAll();
+    	recentFiles.forEach(addRecentItem);
     }
+    
+    BiConsumer<File, String> addRecentItem = (f, fn) ->
+    {
+    	JMenuItem rf = new JMenuItem(fn);
+    	rf.addActionListener(new ActionListener()
+    	{
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				doOpenRecent(f);
+			}
+    		
+    	});
+    	//rm.add(rf);
+    	rm.insert(rf, 0);
+    	
+    };
+    
     private void makeReplace()
     {
     	r.addActionListener(new ActionListener()
@@ -253,10 +285,20 @@ public class SimpleNotePad extends JFrame{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+    	recentFiles.put(fileToOpen, fileToOpen.getName());
+    	updateRecent();
     }
-    private void doRecent()
+    private void doOpenRecent(File f)
     {
-    	
+    	try {
+			FileReader fr = new FileReader(f);
+			BufferedReader br = new BufferedReader(fr);
+			d.read(br, null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	recentFiles.put(f, f.getName());
+    	updateRecent();
     }
     private void doReplace()
     {
