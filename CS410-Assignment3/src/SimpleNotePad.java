@@ -94,7 +94,6 @@ public class SimpleNotePad extends JFrame{
     	makeNew();
     	makeSave();
     	makePrint();
-    	//updateRecent();	//	uncomment if recent files gains persistence
         makeCopy();
         makePaste();
         makeReplace();
